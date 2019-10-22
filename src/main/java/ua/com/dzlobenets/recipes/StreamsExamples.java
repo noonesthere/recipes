@@ -1,8 +1,5 @@
 package ua.com.dzlobenets.recipes;
 
-import java.util.Arrays;
-import java.util.stream.Collectors;
-
 public class StreamsExamples {
     static void simpleArraysAsStream() {
         String[] groups = {"Guns N Roses", "UFO", "Skid Row", "Cinderella"};
