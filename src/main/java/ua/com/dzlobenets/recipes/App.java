@@ -3,12 +3,41 @@
  */
 package ua.com.dzlobenets.recipes;
 
+import com.sun.net.httpserver.Headers;
+import com.sun.net.httpserver.HttpExchange;
+import com.sun.net.httpserver.HttpServer;
+
+import javax.annotation.Nonnull;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.InetSocketAddress;
+
 public class App {
-    public String getGreeting() {
-        return "Hello world.";
+
+    public void getGreeting() throws IOException {
+        InetSocketAddress localhost = new InetSocketAddress("localhost", 8181);
+        HttpServer httpServer = HttpServer.create(localhost, 8181);
+        httpServer.createContext("/test", App::handle);
+        httpServer.start();
+        System.out.println("Server started!");
     }
 
-    public static void main(String[] args) {
-        System.out.println(new App().getGreeting());
+//    getRequestMethod() to determine the command
+//    getRequestHeaders() to examine the request headers (if needed)
+//    getRequestBody() returns a InputStream for reading the request body. After reading the request body, the stream is close.
+//    getResponseHeaders() to set any response headers, except content-length
+//    sendResponseHeaders(int,long) to send the response headers. Must be called before next step.
+//    getResponseBody() to get a OutputStream to send the response body. When the response body has been written, the stream must be closed to terminate the exchange.
+    private static void handle(@Nonnull HttpExchange http) throws IOException {
+        byte[] bytes = AppHelper.HTTP_PAGE.getBytes();
+        http.sendResponseHeaders(200, bytes.length);
+        OutputStream responseBody = http.getResponseBody();
+        responseBody.write(bytes);
+        responseBody.close();
+    }
+
+    public static void main(String[] args) throws IOException {
+        new App().getGreeting();
     }
 }
