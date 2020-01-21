@@ -27,7 +27,7 @@ hs_err_pid*
 
 # Ignore Gradle build output directory
 build
-
+.idea/*
 *.iws
 *.iml
 *.ipr
